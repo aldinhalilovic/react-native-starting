@@ -1,14 +1,53 @@
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { useState } from "react";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ScrollView,
+  FlatList,
+} from "react-native";
 
 export default function App() {
+  const [goal, setGoal] = useState();
+  const [listGoal, setListGoal] = useState([]);
+
+  function goalInputHandler(enteredText) {
+    setGoal(enteredText);
+  }
+
+  function addGoalHandler() {
+    setListGoal((prev) => [
+      ...prev,
+      { text: goal, key: Math.random().toString() },
+    ]);
+    setGoal();
+  }
+
   return (
     <View style={styles.appContainer}>
       <View style={styles.inputContainer}>
-        <TextInput placeholder="Your goal" style={styles.textInput} />
-        <Button title="Add Goal" />
+        <TextInput
+          placeholder="Your goal"
+          style={styles.textInput}
+          onChangeText={goalInputHandler}
+          value={goal}
+        />
+        <Button title="Add Goal" onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsContainer}>
-        <Text>List of Goals</Text>
+        <FlatList
+          data={listGoal}
+          alwaysBounceVertical={false}
+          renderItem={(itemData) => {
+            return (
+              <View style={styles.singleGoalContainer}>
+                <Text style={styles.goal}>{itemData.item.text}</Text>
+              </View>
+            );
+          }}
+        />
       </View>
     </View>
   );
@@ -16,16 +55,16 @@ export default function App() {
 
 const styles = StyleSheet.create({
   appContainer: {
+    flex: 1,
     paddingTop: 50,
     paddingHorizontal: 16,
-    height: "100%",
   },
   inputContainer: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingBottom: 24,
+    marginBottom: 24,
     borderBottomWidth: 1,
     borderBottomColor: "#cccccc",
   },
@@ -38,6 +77,15 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   goalsContainer: {
-    flex: 3,
+    flex: 5,
+  },
+  singleGoalContainer: {
+    margin: 8,
+    padding: 10,
+    borderRadius: 6,
+    backgroundColor: "#5e0acc",
+  },
+  goal: {
+    color: "white",
   },
 });
