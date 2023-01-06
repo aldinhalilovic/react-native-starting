@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StyleSheet, View, FlatList, Button } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import GoalInput from "./components/GoalInput";
 import GoalItem from "./components/GoalItem";
 
@@ -30,29 +31,32 @@ export default function App() {
   }
 
   return (
-    <View style={styles.appContainer}>
-      <Button title="Add your goal" color="#5e0acc" onPress={showModal} />
-      <GoalInput
-        onAddGoal={addListGoal}
-        showModal={modalIsVisible}
-        onClose={hideModal}
-      />
-      <View style={styles.goalsContainer}>
-        <FlatList
-          data={listGoal}
-          alwaysBounceVertical={false}
-          renderItem={(itemData) => {
-            return (
-              <GoalItem
-                text={itemData.item.text}
-                removeItem={removeGoal}
-                id={itemData.item.id}
-              />
-            );
-          }}
+    <>
+      <StatusBar style="light" />
+      <View style={styles.appContainer}>
+        <Button title="Add your goal" color="#a065ec" onPress={showModal} />
+        <GoalInput
+          onAddGoal={addListGoal}
+          showModal={modalIsVisible}
+          onClose={hideModal}
         />
+        <View style={styles.goalsContainer}>
+          <FlatList
+            data={listGoal}
+            alwaysBounceVertical={false}
+            renderItem={(itemData) => {
+              return (
+                <GoalItem
+                  text={itemData.item.text}
+                  removeItem={removeGoal}
+                  id={itemData.item.id}
+                />
+              );
+            }}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
